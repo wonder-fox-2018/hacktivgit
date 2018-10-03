@@ -110,13 +110,46 @@ class RepoController{
         })   
     }
 
+    // detail of repository
+    static detailRepository(req,res){
+        request({
+            method: 'GET',
+            url: `https://api.github.com/user/starred`,
+            headers:{
+                'User-Agent': 'request',
+                Authorization: 'token '+process.env.GITTOKEN
+            }
+        },(err, response,body)=>{
+            if(!err){
+                let data = JSON.parse(body)
+                let sortedArr = []
+
+                data.forEach(repo => {
+                    if(repo.name === req.body.name){
+                        sortedArr.push(repo)
+                    }
+                });
+
+                res.status(200).json({
+                    msg: `Details of Repo by name ${req.body.name}`,
+                    data: sortedArr
+                })
+
+            }else{
+                res.status(500).json({
+                    msg: 'ERROR: ',err
+                })
+            }
+        })
+    }
+
     // unstar repository
     static unstarRepository (req,res){
         const options = {
             url : `https://api.github.com/user/starred/${req.body.username}/${req.body.repository}`,
             headers : {
                 'User-Agent' : 'request',
-                Authorization : 'token '+process.env.TOKEN
+                Authorization : 'token '+process.env.GITTOKEN
             }
         }
         request.delete(options,(err,response,body)=>{

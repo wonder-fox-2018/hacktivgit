@@ -24,6 +24,11 @@ router.post('/search' , (req,res)=>{
     RepoController.searchRepoByNameKeyword(req,res)
 })
 
+// get detail of repository
+router.post('/details', (req,res)=>{
+    RepoController.detailRepository(req,res)
+})
+
 // unstar repository
 router.delete('/unstar', (req,res) =>{
     RepoController.unstarRepository(req,res)
