@@ -3,10 +3,12 @@ require('dotenv').config()
 const express = require('express')
 const app = express()
 const CallbackGitRouter = require('./routes/CallbackGitRouter')
+const RepoRouter = require('./routes/RepoRouter')
 
 app.use(express.urlencoded({ extended: false}))
 app.use(express.json())
 app.use('/callbackgit' , CallbackGitRouter)
+app.use('/repos', RepoRouter)
 
 app.get('/', (req, res) =>{
     res.send('OK')
