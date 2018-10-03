@@ -15,8 +15,13 @@ router.post('/username', (req,res) =>{
 })
 
 // create repository
-router.post('/', (req,res) =>{
+router.post('/add', (req,res) =>{
+    RepoController.createRepository(req,res)
+})
 
+// search repository 
+router.post('/search' , (req,res)=>{
+    RepoController.searchRepoByNameKeyword(req,res)
 })
 
 module.exports = router

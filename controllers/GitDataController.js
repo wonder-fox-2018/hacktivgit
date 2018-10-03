@@ -15,25 +15,26 @@ class GitDataController {
             }
         },(error, response, body)=>{
             if(!error){
-                // console.log('BODY-->', body)
-                request({
-                    url: `https://api.github.com/user?access_token=${body.access_token}`,
-                    method: 'GET',
-                    headers: {
-                        'User-Agent': 'request'   
-                    }
-                },(error, response, body)=>{
-                    if(!error){
-                        res.status(200).json({
-                            msg: 'User Data',
-                            data: body
-                        })
-                    }else{
-                        res.status(500).json({
-                            msg: 'ERROR: ',error
-                        })
-                    }
-                })
+                console.log('BODY-->', body)
+                res.send(body.access_token)
+                // request({
+                //     url: `https://api.github.com/user?access_token=${body.access_token}`,
+                //     method: 'GET',
+                //     headers: {
+                //         'User-Agent': 'request'   
+                //     }
+                // },(error, response, body)=>{
+                //     if(!error){
+                //         res.status(200).json({
+                //             msg: 'User Data',
+                //             data: body
+                //         })
+                //     }else{
+                //         res.status(500).json({
+                //             msg: 'ERROR: ',error
+                //         })
+                //     }
+                // })
             }else{
                 // console.log('ERROR: ', error)
                 res.status(500).json({
