@@ -6,7 +6,7 @@ require('dotenv').config();
 router.get('/:username', (req, res) => {
     request({
         method: 'GET',
-        url: `https://api.github.com/users/${req.params.username}/repos`,
+        url: `https://api.github.com/users/${req.body.username}/repos`,
         json:true,
         headers: {
             'User-Agent': 'request'

@@ -56,7 +56,7 @@ router.get('/starred', (req, res) => {
 });
 
 
-router.get('/create-repo', (req, res) => {
+router.post('/create-repo', (req, res) => {
     request({
         method: 'POST',
         url: `https://api.github.com/user/repos`,
@@ -66,13 +66,13 @@ router.get('/create-repo', (req, res) => {
         },
         json: true,
         body: {
-            name: "Hello-World from API",
-            description: "This is your first repository",
-            homepage: "https://github.com",
-            private: false,
-            has_issues: true,
-            has_projects: true,
-            has_wiki: true
+            name: req.body.name,
+            description: req.body.description,
+            homepage: req.body.homepage,
+            private: req.body.private,
+            has_issues: req.body.has_issues,
+            has_projects: req.body.has_projects,
+            has_wiki: req.body.has_wiki
         }
     }, (err, incomingMessage, response) => {
         console.log(err);
@@ -84,10 +84,10 @@ router.get('/create-repo', (req, res) => {
     });
 });
 
-router.get('/unstar', (req, res) => {
+router.delete('/unstar', (req, res) => {
     request({
         method: 'DELETE',
-        url: `https://api.github.com/user/starred/${req.query.username}/${req.query.repo}`,
+        url: `https://api.github.com/user/starred/${req.body.username}/${req.body.repo}`,
         headers: {
             'User-Agent': 'request',
             'Authorization' : `token ${process.env.ACCESS_TOKEN}`
