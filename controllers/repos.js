@@ -2,6 +2,24 @@ const request = require('request')
 
 module.exports = {
 
+    listAll: function (req, res) {
+        let options = {
+            url: 'https://api.github.com/user/repos',
+            headers: {
+                'User-Agent': 'request',
+                'Authorization': `token ${req.access_token}`
+            }
+        };
+        
+        request.get(options, (err, response, body) => {
+            if (err) {
+                res.status(500).json({message: err.message})
+            } else {
+                res.status(200).json({message: 'List of starred repositories acquired', list: JSON.parse(body)})
+            }
+        });
+    },
+    
     listStarred: function (req, res) {
         let options = {
             url: 'https://api.github.com/user/starred',
@@ -49,7 +67,7 @@ module.exports = {
     
     searchByName: function (req, res) {
         let options = {
-            url: `https://api.github.com/search/repositories?q=${req.params.name}+user:${req.params.owner}`,
+            url: `https://api.github.com/search/repositories?q=${req.params.name}+user:${req.params.owner}+fork:true`,
             headers: {
                 'User-Agent': 'request',
                 'Authorization': `token ${req.access_token}`
@@ -99,7 +117,7 @@ module.exports = {
             if (err) {
                 res.status(500).json({message: err.message})
             } else {
-                res.status(500).json({message: `List of repositories by ${req.params.username}`, list: JSON.parse(body)})
+                res.status(200).json({message: `List of repositories by ${req.params.username}`, list: JSON.parse(body)})
             }
         })
     },

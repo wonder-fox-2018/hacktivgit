@@ -1,7 +1,8 @@
 const router = require('express').Router();
-const { listStarred, listStarredFilter, searchByName, create, listByUsername, star, unstar } = require('../controllers/repos')
+const { listAll, listStarred, listStarredFilter, searchByName, create, listByUsername, star, unstar } = require('../controllers/repos')
 const isLogin = require('../middlewares/isLogin')
 
+router.get('/', isLogin, listAll)
 router.get('/', isLogin, listStarred)
 router.post('/filter', isLogin, listStarredFilter)
 router.get('/searchByName/:name/:owner', isLogin, searchByName)
