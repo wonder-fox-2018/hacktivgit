@@ -55,28 +55,61 @@
               method : 'GET',
               url: 'http://localhost:3004/repos/lists'
           })
-          .done(function(result){
+          .done((result)=>{
               let data = result['data']
               $('.list').empty();
-              let str = ''
+            //   let str = ''
               data.forEach(repos => {
                   $('.list').append(
-                       `  <div class="card-body">
-                              <h5 class="card-title">
-                                <label onclick="getDetails('${repos['name']}')" >${repos['name']}</label>
-                              </h5>
-                              <p class="card-text">description : ${repos['description']}</p>
-                              <p class="card-text">${repos['stargazers_count']} stars</p>
-                          </div>`  
+                    `  <div class="card-body">
+                            <h5 class="card-title">
+                            <label onclick="getDetails('${repos['name']}')" >${repos['name']}</label>
+                            </h5>
+                            <p class="card-text">description : ${repos['description']}</p>
+                            <p class="card-text">${repos['stargazers_count']} stars</p>
+                        </div>`  
                   );
               });
           })
-          .fail(function(error){
+          .fail((error)=>{
               $('.list').empty();
               $('.list').append(
                   `<div>Err : ${error}</div>`
-              )
+              );
           })
+
+    // get repo by username
+    function getRepo(input){
+        let name = input
+        $.ajax({
+            method: 'POST',
+            url: `http://localhost:3004/repos/username`,
+            data: {
+               username: name    
+            }
+        })
+        .done(function(result){
+            let data = result['data']
+            $('list').empty();
+            data.forEach(repos =>{
+                $('list').append(
+                    ` <div class="card-body">
+                            <h5 class="card-title">
+                            <label onclick="getDetails('${repos['name']}')" >${repos['name']}</label>
+                            </h5>
+                            <p class="card-text">description : ${repos['description']}</p>
+                            <p class="card-text">${repos['stargazers_count']} stars</p>
+                        </div>`
+                )
+            });
+        })
+        .fail((error)=>{
+            $('list').empty()
+            $('list').append(
+                `<div>Err: ${error}</div>`
+            )
+        })
+    }
 
     </script>   
 </body>
