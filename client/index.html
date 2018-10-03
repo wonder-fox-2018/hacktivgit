@@ -115,7 +115,6 @@
     // search repo by keyword
     $('.search').keypress(function(){
         let input = $('.search').val()
-
         $.ajax({
             method: 'POST',
             url: 'http://localhost:3004/repos/search',
@@ -134,8 +133,7 @@
                         </h5>
                         <p class="card-text">description : ${repos['description']}</p>
                         <p class="card-text">${repos['stargazers_count']} stars</p>
-                    </div>
-                  `
+                    </div>`
                 )
             })
         })
@@ -146,6 +144,39 @@
             )
         })
     })
+
+    // get detail information of a repository
+    function getDetails(input){
+        $.ajax({
+            method: 'POST',
+            url: 'http://localhost:3004/repos/details',
+            data: {
+                name: input
+            }
+        })
+        .done((result)=>{
+            let data = result.data[0]
+            console.log('data--->', data)
+            $('.details').empty()
+            $('.details').append(
+                `<div>
+                    <h1><a href = "${data.url}" target="_blank" >${data.name}</a></h1>
+                    <hr/>
+                    <h3>Description</h3>
+                    <br/>
+                    ${data.description}
+                    <hr/>
+                    <h3>Star count: </h3> ${data.stargazers_count}
+                </div>`
+            )
+        })
+        .fail((error)=>{
+            $('.details').empty()
+            $('.details').append(
+                `<div>Err: ${error}</div>`
+            )
+        })
+    }
 
     </script>   
 </body>
