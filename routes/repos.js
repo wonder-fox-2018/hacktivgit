@@ -3,7 +3,7 @@ const { listAll, listStarred, listStarredFilter, searchByName, create, listByUse
 const isLogin = require('../middlewares/isLogin')
 
 router.get('/', isLogin, listAll)
-router.get('/', isLogin, listStarred)
+router.get('/starred', isLogin, listStarred)
 router.post('/filter', isLogin, listStarredFilter)
 router.get('/searchByName/:name/:owner', isLogin, searchByName)
 router.post('/', isLogin, create)
