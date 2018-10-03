@@ -10,8 +10,8 @@ module.exports = {
       method: 'post',
       json: true,
       body: {
-        'client_id': '77e3b8abe519744e2807',
-        'client_secret': '525997902796c1a258831fabcb6ab19fe99f3381',
+        'client_id': process.env.CLIENT_ID,
+        'client_secret': process.env.CLIENT_SECRET,
         'code': req.query.code
       }}
     , function (error, response) {
@@ -77,30 +77,92 @@ module.exports = {
 
   },
 
-  serachRepo(req,res) {
-    const options = {
+  createRepo(req,res) {
+
+    request({
       url: 'https://api.github.com/user/repos',
+      method: 'post',
       headers: {
-        'User-Agent': 'request',
-        'Authorization': 'token ' + process.env.TOKEN_GIT
-      }
-    };
-
-    function callback(error, response, body) {
-      let data = listRepoStarred(JSON.parse(body))
-      if (!error) {
-        res.status(200).json({
-          message: `List repository got star`,
-          data
+          'User-Agent': 'request',
+          'Authorization': 'token ' + process.env.TOKEN_GIT
+      },
+      body : JSON.stringify({
+          "name" : req.body.name
+      })
+    }, function(error, message, response){
+      if(!error){
+        res.status(201).json({
+          message: `create repository success`, 
+          data: JSON.parse(response)
         })
-      } else {
+      } else (
         res.status(500).json({
-          message: error
+          error
         })
-      }
-    }
+      )
+    })
+  },
 
-    request(options, callback)
+  searchrepo(req,res) {
+    request({
+      url: `https://api.github.com/search/repositories?q="${req.query.name}"`,
+      headers: {
+          'User-Agent': 'request',
+          'Authorization': 'token ' + process.env.TOKEN_GIT
+      }
+    }, function(error, message, response){
+      if(!error){
+        res.status(201).json({
+          message: `create repository success`, 
+          data: JSON.parse(response)
+        })
+      } else (
+        res.status(500).json({
+          error
+        })
+      )
+    })
+  },
+
+  searchRepoByUsername(req,res) {
+    request({
+      url: `https://api.github.com/users/${req.query.username}/repos`,
+      headers: {
+          'User-Agent': 'request',
+          'Authorization': 'token ' + process.env.TOKEN_GIT
+      }
+    }, function(error, message, response){
+      if(!error){
+        res.status(201).json({
+          data: JSON.parse(response)
+        })
+      } else (
+        res.status(500).json({
+          error
+        })
+      )
+    })
+  },
+
+  unstarRepo(req,res) {    
+    request({
+      url: `https://api.github.com/user/starred/${req.query.owner}/${req.query.repo}`,
+      method: 'DELETE',
+      headers: {
+          'User-Agent': 'request',
+          'Authorization': 'token ' + process.env.TOKEN_GIT
+      }
+    }, function(error, message, response){
+      if(!error){
+        res.status(201).json({
+          message
+        })
+      } else (
+        res.status(500).json({
+          error
+        })
+      )
+    })
   }
 
 }
