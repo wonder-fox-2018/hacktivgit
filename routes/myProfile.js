@@ -68,19 +68,14 @@ router.post('/create-repo', (req, res) => {
         body: {
             name: req.body.name,
             description: req.body.description,
-            homepage: req.body.homepage,
-            private: req.body.private,
-            has_issues: req.body.has_issues,
-            has_projects: req.body.has_projects,
-            has_wiki: req.body.has_wiki
+            homepage: req.body.homepage
         }
     }, (err, incomingMessage, response) => {
-        console.log(err);
         if (err) {
             res.status(500).json(err);
         } else {
             res.status(200).json(response);
-        }
+        }   
     });
 });
 
