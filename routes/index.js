@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 require('dotenv').config()
 var request = require('request');
+const myProfile = require('./myProfile');
+const repo = require('./repo');
 
 
 /* GET home page. */
@@ -11,7 +13,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/login', (req, res) => {
   
-  res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}`)
+  res.redirect(`https://github.com/login/oauth/authorize?client_id=${process.env.CLIENT_ID}&scope=repo`); //including 2 scopes: scope=user,repo
 });
 
 router.get('/login/callback', (req, res) => {
@@ -31,6 +33,7 @@ router.get('/login/callback', (req, res) => {
     if (err) {
       res.status(500).json(err);
     } else {
+      console.log(response.access_token);
       request({
         url: `https://api.github.com/user?access_token=${response.access_token}`,
         method: 'GET',
@@ -50,6 +53,12 @@ router.get('/login/callback', (req, res) => {
     }
   });
 });
+
+router.use('/myProfile', myProfile);
+
+router.use('/repo', repo);
+
+
 
 
 
