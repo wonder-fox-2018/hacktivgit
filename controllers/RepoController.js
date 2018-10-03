@@ -109,6 +109,26 @@ class RepoController{
             }
         })   
     }
+
+    // unstar repository
+    static unstarRepository (req,res){
+        const options = {
+            url : `https://api.github.com/user/starred/${req.body.username}/${req.body.repository}`,
+            headers : {
+                'User-Agent' : 'request',
+                Authorization : 'token '+process.env.TOKEN
+            }
+        }
+        request.delete(options,(err,response,body)=>{
+            if(err){
+                res.status(500).json({ msg : err});
+            }else{
+                res.status(200).json({
+                    msg : `Repo ${req.body.repository} has been unstarred`
+                })
+            }
+        })
+    }
 }
 
 module.exports = RepoController
